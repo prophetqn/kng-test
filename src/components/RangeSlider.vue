@@ -1,16 +1,16 @@
 <template>
     <div ref="sliderContainer" class="slider-container">
-        <div ref="leftSpace" class="left-space"></div>
+        <div ref="leftSpace" class="left-bar"></div>
         <div 
             ref="slider"
             @mousedown.prevent="startSlide" 
-            class="slider"
+            class="slider shadow"
         >
             <i class="bi bi-chevron-left"></i>
             <span>$ {{ value.toLocaleString('en-US') }}</span>
             <i class="bi bi-chevron-right"></i>
         </div>
-        <div class="right-space"></div>
+        <div class="right-bar"></div>
     </div>
 </template>
 
@@ -66,8 +66,7 @@ export default {
                 this.posXSlider = Math.max(this.posXSlider, 0);
                 this.posXSlider = Math.min(this.posXSlider, this.distance);
                 this.$refs['leftSpace'].style.flexBasis = this.posXSlider + 'px';
-                this.value = Math.round((this.posXSlider / this.distance * this.range) / this.interval) * this.interval;
-                this.$emit('passValue', this.value);
+                this.passValue();
             }
         },
         stopSlide() {
@@ -75,6 +74,10 @@ export default {
             if (this.$refs['slider']) {
                 this.$refs['slider'].style.cursor = 'grab';
             }
+        },
+        passValue() {
+            this.value = Math.round((this.posXSlider / this.distance * this.range) / this.interval) * this.interval;
+            this.$emit('passValue', this.value);
         }
     }
 }
@@ -87,13 +90,13 @@ export default {
     width: 100%;
     align-items: center;
 }
-.left-space, .right-space, .slider {
+.left-bar, .right-bar, .slider {
     display: inline-block;
 }
-.left-space, .right-space {
+.left-bar, .right-bar {
     height: 5px;
 }
-.left-space {
+.left-bar {
     background: #339966;
     flex-basis: 0;
     flex-grow: 0;
@@ -114,7 +117,10 @@ export default {
     display: flex;
     justify-content: space-between;
 }
-.right-space {
+.slider:hover {
+    background-color: #2c8c54
+}
+.right-bar {
     background: #f8f8f8;
     flex: 1 1 auto;
     border-radius: 0 2.5px 2.5px 0;
